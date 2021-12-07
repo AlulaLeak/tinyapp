@@ -32,3 +32,18 @@ app.get("/urls/:shortURL", (req, res) => { // made a route with a parameter
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars); // made the templateVars object contents available to use in EJS file urls_shows
 });
+
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL]
+  res.redirect(longURL);
+});
+
+    // Generate Random String Function
+
+    function generateRandomString() {
+
+    }
