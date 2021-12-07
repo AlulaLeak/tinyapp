@@ -13,7 +13,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`); // made our server/app listen on port 8000 for a command
 });
 
-    // Routes //
+    // Single Path Route //
 
 app.get("/", (req, res) => { // made the server/app able to get route '/' , for our client/browser
   res.render("index"); // sent a render response
@@ -23,19 +23,12 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase }; // made object of template variables
-  res.render("urls_index", templateVars); // made the templateVars object contents available to use in EJS file urls_index
-});
+  // ^ urls path in ./routes/urls.js ^ \\
 
-app.get("/urls/:shortURL", (req, res) => { // made a route with a parameter
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  res.render("urls_show", templateVars); // made the templateVars object contents available to use in EJS file urls_shows
-});
+const urlRouter = require('./routes/urls')
+app.use('/urls', urlRouter)
 
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
-});
+    // paths with parameters
 
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
@@ -44,6 +37,6 @@ app.get("/u/:shortURL", (req, res) => {
 
     // Generate Random String Function
 
-    function generateRandomString() {
+function generateRandomString() {
 
-    }
+}
