@@ -22,6 +22,7 @@ app.listen(PORT, () => {
 });
 
     // Routes //
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -53,8 +54,11 @@ app.post("/urls", (req, res) => {
   res.redirect(301, `/urls/${tinyURL}`);         // Respond with 'Ok' (we will replace this)
   urlDatabase[tinyURL] = req.body.longURL
   console.log(urlDatabase)
-  
 });
+app.post('/urls/:shortURL/delete', (req, res) => {
+  delete urlDatabase[req.params.shortURL]
+  res.redirect('/urls')
+})
 
     // Generate Random String Function
 
