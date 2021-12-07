@@ -1,6 +1,13 @@
 const express = require("express"); // brought in express
+const bodyParser = require("body-parser");
 const app = express();
 const PORT = 8000; // default port 8080
+
+    // body parser middleware to convert Buffer to Human-Readable String
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+    // Temporary Database 
 
 const urlDatabase = { // Defined our database
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -17,16 +24,12 @@ app.listen(PORT, () => {
 
 app.get("/", (req, res) => { // made the server/app able to get route '/' , for our client/browser
   res.render("index"); // sent a render response
+  console.log('hey')
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-
-  // ^ urls path in ./routes/urls.js ^ \\
-
-const urlRouter = require('./routes/urls')
-app.use('/urls', urlRouter)
 
     // paths with parameters
 
@@ -35,8 +38,14 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+  // ^ urls path in ./routes/urls.js ^ \\
+
+  const urlRouter = require('./routes/urls')
+  app.use('/urls', urlRouter)
+
     // Generate Random String Function
 
-function generateRandomString() {
 
-}
+
+
+module.exports = urlDatabase
