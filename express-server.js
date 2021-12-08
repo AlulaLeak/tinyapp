@@ -59,6 +59,12 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   delete urlDatabase[req.params.shortURL]
   res.redirect('/urls')
 })
+app.post("/u/:shortURL", (req, res) => {
+  //console.log(`/${req.params['shortURL']}`)
+  urlDatabase[req.params['shortURL']] = req.body['longURL']
+  console.log(urlDatabase)
+  res.redirect(301, `/urls/${req.params['shortURL']}`) // <-- In case we want to redirect
+});
 
     // Generate Random String Function
 
