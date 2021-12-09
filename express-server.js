@@ -149,6 +149,14 @@ app.post("/register", async (req, res) => {
       res.status(403).send('Sorry, user already exists!')
       return
     }
+    if (email === "") {
+      res.status(403).send('Please fill your email!')
+      return
+    }
+    if (req.body.password === '') {
+      res.status(403).send('Please fill your password!')
+      return
+    }
   }
 
   newUser = {
