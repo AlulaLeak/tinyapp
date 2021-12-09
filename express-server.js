@@ -6,14 +6,55 @@ const PORT = 8000; // default port 8080
 // Cookie Parser?
 
 const cookieParser = require("cookie-parser");
+const req = require("express/lib/request");
 app.use(cookieParser());
 
 // Temporary Database 
+
+
+// Temporary Database 
+
+ // figure out how to express the cookie
+  // when someone registers and the cookie is created,
+  // it returns as a req.cookies[something]
+
+
+  function getEmailFromUserID(id) {
+
+    for (const key in users) {
+      if (users[key] === Object.keys(req.cookies)) {
+        return console.log(users[key]["email"])
+      } else (
+        console.log(`no match`)
+      )
+    }
+  }
+
+// I want to return the value of the email in the userID
+// that matches the cookieID
+
+
+
+
+
+
 
 const urlDatabase = { // Defined our database
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
 
 // body parser middleware to convert Buffer to Human-Readable String
 
@@ -41,12 +82,14 @@ app.get("/urls", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
     username: req.cookies["username"],
+    users: users
   };
   res.render("urls_index", templateVars);
 })
 app.get("/urls/new", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
+    users: users
   };
   res.render("urls_new", templateVars);
 });
@@ -54,12 +97,22 @@ app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies["username"]
+    username: req.cookies["username"],
+    users: users
   };
   res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
   res.redirect(urlDatabase[req.params.shortURL]);
+});
+app.get("/register", (req, res) => {
+  console.log(req.cookies["username"])
+  const templateVars = {
+    username: req.cookies["username"],
+    users: users
+  };
+  // Fill in
+  res.render("register", templateVars)
 });
 
 app.post("/urls", (req, res) => {
@@ -87,6 +140,18 @@ app.post("/logout", (req, res) => {
   res.clearCookie('username')
   res.redirect(301, `/urls`)
 });
+app.post("/register", (req, res) => {
+  console.log(req.body)
+  userID = generateRandomString(8)
+  users[userID] = {id: userID, email: req.body.email, password: req.body.password}
+  res.cookie(`userID`, userID)
+  users[userID]["email"]
+
+console.log(users[userID]["email"])
+
+  
+  res.redirect(301, `/register`)
+});
 
 // Generate Random String Function
 
@@ -99,6 +164,5 @@ function generateRandomString(length) {
   }
   return result;
 }
-
 
 
