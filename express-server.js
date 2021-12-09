@@ -2,6 +2,7 @@ const express = require("express"); // brought in express
 const bodyParser = require("body-parser");
 const app = express();
 const PORT = 8000; // default port 8080
+const bcrypt = require('bcrypt')
 
 // Cookie Parser?
 
@@ -10,7 +11,6 @@ const req = require("express/lib/request");
 app.use(cookieParser());
 
 // Temporary Database 
-
 
 // Temporary Database 
 
@@ -58,7 +58,7 @@ const users = {
 
 // body parser middleware to convert Buffer to Human-Readable String
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false })); // switched to allow database use in EJS
 
 app.set('view engine', 'ejs'); // made a view engine and set it to ejs
 
@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
+  res.json(users);
 });
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
@@ -81,15 +81,14 @@ app.get("/hello", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"],
-    users: users
+    user: req.cookies.email,
   };
+
   res.render("urls_index", templateVars);
 })
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
-    users: users
+    user: req.cookies.email,
   };
   res.render("urls_new", templateVars);
 });
@@ -97,8 +96,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies["username"],
-    users: users
+    user: req.cookies.email,
   };
   res.render("urls_show", templateVars);
 });
@@ -106,10 +104,8 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(urlDatabase[req.params.shortURL]);
 });
 app.get("/register", (req, res) => {
-  console.log(req.cookies["username"])
   const templateVars = {
-    username: req.cookies["username"],
-    users: users
+    user: req.cookies.email,
   };
   // Fill in
   res.render("register", templateVars)
@@ -140,18 +136,31 @@ app.post("/logout", (req, res) => {
   res.clearCookie('username')
   res.redirect(301, `/urls`)
 });
-app.post("/register", (req, res) => {
-  userID = generateRandomString(8)
-  res.cookie(`userID`, userID)
-  users[userID] = {
-    id: userID,
-    email: req.body.email,
-    password: req.body.password
+app.post("/register", async (req, res) => {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10)
+  const email = req.body.email
+  const password = hashedPassword
+  const userID = generateRandomString(8)
+
+  for (let userId in users) {
+    const user = users[userId]
+
+    if (user.email === email) {
+      res.status(403).send('Sorry, user already exists!')
+      return
+    }
   }
-  users[userID]["email"]
-  res.redirect(301, `/register`)
-  idExtractor = req.cookies
-  console.log(idExtractor['userID'])
+
+  newUser = {
+    userID,
+    email,
+    password: hashedPassword
+  }
+  users[userID] = newUser
+  res.cookie('user_id', userID)
+  res.cookie("email", email)
+  res.redirect('/urls')
+
 });
 // Generate Random String Function
 
