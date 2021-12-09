@@ -58,7 +58,7 @@ const users = {
 
 // body parser middleware to convert Buffer to Human-Readable String
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs'); // made a view engine and set it to ejs
 
@@ -141,18 +141,18 @@ app.post("/logout", (req, res) => {
   res.redirect(301, `/urls`)
 });
 app.post("/register", (req, res) => {
-  console.log(req.body)
   userID = generateRandomString(8)
-  users[userID] = {id: userID, email: req.body.email, password: req.body.password}
   res.cookie(`userID`, userID)
+  users[userID] = {
+    id: userID,
+    email: req.body.email,
+    password: req.body.password
+  }
   users[userID]["email"]
-
-console.log(userID)
-
-  
   res.redirect(301, `/register`)
+  idExtractor = req.cookies
+  console.log(idExtractor['userID'])
 });
-
 // Generate Random String Function
 
 function generateRandomString(length) {
@@ -164,6 +164,3 @@ function generateRandomString(length) {
   }
   return result;
 }
-
-
-
