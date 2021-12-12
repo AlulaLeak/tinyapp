@@ -10,12 +10,12 @@
     <title>New URL - TinyApp Example</title>
     <%- include('partials/_header') %>
   </head>
-  
-
     <div style="max-width:500px; position: absolute; left: 50%; top: 35%; margin: -100px 0 0 -150px;">
-      <h3 style="text-align: center; padding-bottom: 20px;">Register</h3>
-    <form action="/register" method="POST">
+      <h3 style="text-align: center; padding-bottom: 20px;">Login to Access Your Shortened URLS and Make Edits</h3>
+    <form action="/login" method="POST">
+
       <!-- Email input -->
+
       <div class="form-outline mb-4">
         <input type="email" name="email" class="form-control" />
         <label class="form-label" for="form2Example1">Email address</label>
@@ -26,7 +26,7 @@
         <input type="password" name="password" class="form-control" />
         <label class="form-label" for="form2Example2">Password</label>
       </div>
-    
+
       <!-- 2 column grid layout for inline styling -->
       <div class="row mb-4">
         <div class="col d-flex justify-content-center">
@@ -46,7 +46,6 @@
       <!-- Submit button -->
       <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
     </form>
-
   </div>
       <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

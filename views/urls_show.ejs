@@ -10,10 +10,10 @@
 
 <body>
   <%- include('partials/_header') %>
-    <div class="card text-center">
+    <div class="card text-center" style="width:800px; margin:0 auto;">
       <div class="card-header"></div>
       <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %>
+        <h5 class="card-title">TinyURL for: <%= longURL['longURL'] %>
         </h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>">
             <%= shortURL %>
@@ -22,11 +22,13 @@
       <div>
         <main style="margin: 1em;">
           <h3>Update Long URL</h3>
-          <form class="form-inline" action="/u/<%= shortURL %>" method="POST">
-            <label for="longURL">Enter a URL:</label>
-            <input class="form-control" type="text" name="longURL" placeholder="http://"
-              style="width: 300px; margin: 1em">
-            <button type="submit" class="btn btn-primary">Update</button>
+          <form class="card text-center" action="/u/<%= shortURL %>" method="POST">
+            <div class="card text-center">
+              <label for="longURL">Enter a URL:</label>
+              <input class="form-control" type="text" name="longURL" placeholder="http://"
+                style="width: 300px; margin: 1em">
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
           </form>
         </main>
       </div>
